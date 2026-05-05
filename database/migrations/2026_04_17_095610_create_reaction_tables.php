@@ -11,9 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('reaction_tables', function (Blueprint $table) {
-            $table->id();
+        Schema::create('reactions', function (Blueprint $table) {
+            $table->ulid('id')->primary(); // Explicit ULID Primary key
+            $table->foreignUlid('user_id')->constrained()->onDelete('cascade'); // Matches User ULID
+            $table->foreignUlid('post_id')->constrained()->onDelete('cascade'); // Matches Post ULID
+            $table->string('type')->default('like');
             $table->timestamps();
+
+            $table->unique(['user_id', 'post_id']);
         });
     }
 
